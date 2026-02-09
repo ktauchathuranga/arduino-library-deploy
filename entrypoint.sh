@@ -15,6 +15,7 @@ git config --global --add safe.directory /github/workspace
 # Extract PR details from the event payload
 PR_NUMBER=$(jq --raw-output .pull_request.number $GITHUB_EVENT_PATH)
 PR_TITLE=$(jq --raw-output .pull_request.title $GITHUB_EVENT_PATH)
+PR_BODY=$(jq --raw-output .pull_request.body $GITHUB_EVENT_PATH)
 PR_VERSION=$(grep '^version=' library.properties | cut -d'=' -f2)
 
 # Extract main version without checking out the branch (avoiding workspace modification)
@@ -28,6 +29,7 @@ echo "Main Version: $MAIN_VERSION"
 export GITHUB_TOKEN=$GITHUB_TOKEN
 export PR_NUMBER
 export PR_TITLE
+export PR_BODY
 export pr_version=$PR_VERSION
 export main_version=$MAIN_VERSION
 export GITHUB_REPOSITORY=$GITHUB_REPOSITORY

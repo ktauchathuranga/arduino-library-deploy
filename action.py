@@ -103,16 +103,20 @@ def validate_version(pr_version, main_version):
 
     print(f"Version {pr_version} is valid.")
 
-# Function to merge PR (unchanged from original)
+# Function to merge PR
 def merge_pr():
     headers = {
         'Authorization': f'token {GITHUB_TOKEN}',
         'Accept': 'application/vnd.github.v3+json',
     }
 
+    # Get PR body to preserve issue references for auto-closing
+    pr_body = os.getenv('PR_BODY', '')
+
     data = {
         'commit_title': f'Merge PR #{os.getenv("PR_NUMBER")} - {os.getenv("PR_TITLE")}',
-        'merge_method': 'squash'
+        'commit_message': pr_body,
+        'merge_method': 'merge'
     }
 
     response = requests.put(GITHUB_API_URL, headers=headers, json=data)
